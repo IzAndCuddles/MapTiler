@@ -32,25 +32,25 @@ wellknowngeogcs = ['WGS84','WGS72','NAD27','NAD83']
 
 # Subset of the GDAL supported file formats...
 supportedfiles =  _("Supported raster files")+"|*.tif;*.tiff;*.kap;*.img;*.sid;*.ecw;*.jp2;*.j2k;*.nitf;*.h1;*.h2;*.hd;*.hdr;*.cit;*.rgb;*.raw;*.blx;*.jpg;*.jpeg;*.png;*.gif;*.bmp;*.wms;*.vrt|" + \
-	_("TIFF / BigTIFF / GeoTIFF (.tif)")+"|*.tif;*.tiff|" + \
-	_("BSB Nautical Chart Format (.kap)")+"|*.kap|" + \
-	_("JPEG2000 - JPEG 2000 (.jp2, .j2k)")+"|*.jp2;*.j2k|" + \
-	_("MrSID - Multi-resolution Seamless Image Database (.sid)")+"|*.sid|" + \
-	_("ECW - ERMapper Compressed Wavelets (.ecw)")+"|*.ecw|" + \
-	_("HFA - Erdas Imagine Images (.img)")+"|*.img|" + \
-	_("NITF - National Imagery Transmission Format (.nitf)")+"|*.nitf|" + \
-	_("NDF - NLAPS Data Format (.h1,.h2,.hd)")+"|*.h1;*.h2;*.hd|" + \
-	_("MFF - Vexcel MFF Raster (.hdr)")+"|*.hdr|" + \
-	_("INGR - Intergraph Raster Format (.cit,.rgb,..)")+"|*.cit;*.rgb|" + \
-	_("EIR -- Erdas Imagine Raw (.raw)")+"|*.raw|" + \
-	_("BLX -- Magellan BLX Topo File Format (.blx)")+"|*.blx|" + \
-	_("JPEG - Joint Photographic Experts Group JFIF (.jpg)")+"|*.jpg;*.jpeg|" + \
-	_("PNG - Portable Network Graphics (.png)")+"|*.png|" + \
-	_("GIF - Graphics Interchange Format (.gif)")+"|*.gif|" + \
-	_("BMP - Microsoft Windows Device Independent Bitmap (.bmp)")+"|*.bmp|" + \
-	_("WMS - GDAL driver for OGC Web Map Server (.wms)")+"|*.wms|" + \
-	_("VRT - GDAL Virtual Raster (.vrt)")+"|*.vrt|" + \
-	_("All files (*.*)")+"|*.*"
+    _("TIFF / BigTIFF / GeoTIFF (.tif)")+"|*.tif;*.tiff|" + \
+    _("BSB Nautical Chart Format (.kap)")+"|*.kap|" + \
+    _("JPEG2000 - JPEG 2000 (.jp2, .j2k)")+"|*.jp2;*.j2k|" + \
+    _("MrSID - Multi-resolution Seamless Image Database (.sid)")+"|*.sid|" + \
+    _("ECW - ERMapper Compressed Wavelets (.ecw)")+"|*.ecw|" + \
+    _("HFA - Erdas Imagine Images (.img)")+"|*.img|" + \
+    _("NITF - National Imagery Transmission Format (.nitf)")+"|*.nitf|" + \
+    _("NDF - NLAPS Data Format (.h1,.h2,.hd)")+"|*.h1;*.h2;*.hd|" + \
+    _("MFF - Vexcel MFF Raster (.hdr)")+"|*.hdr|" + \
+    _("INGR - Intergraph Raster Format (.cit,.rgb,..)")+"|*.cit;*.rgb|" + \
+    _("EIR -- Erdas Imagine Raw (.raw)")+"|*.raw|" + \
+    _("BLX -- Magellan BLX Topo File Format (.blx)")+"|*.blx|" + \
+    _("JPEG - Joint Photographic Experts Group JFIF (.jpg)")+"|*.jpg;*.jpeg|" + \
+    _("PNG - Portable Network Graphics (.png)")+"|*.png|" + \
+    _("GIF - Graphics Interchange Format (.gif)")+"|*.gif|" + \
+    _("BMP - Microsoft Windows Device Independent Bitmap (.bmp)")+"|*.bmp|" + \
+    _("WMS - GDAL driver for OGC Web Map Server (.wms)")+"|*.wms|" + \
+    _("VRT - GDAL Virtual Raster (.vrt)")+"|*.vrt|" + \
+    _("All files (*.*)")+"|*.*"
 
 s = """
 srsFormatList = ['format automatically detected',
