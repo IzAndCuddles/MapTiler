@@ -390,27 +390,33 @@ Your geodata are transformed to the tiles compatible with Google Maps and Earth 
         #params = ['--s_srs','EPSG:4326','/Users/klokan/Desktop/fox-denali-alaska-644060-xl.jpg']
         if self.resume and params[0] != '--resume':
             params.insert(0, '--resume')
-
-        self.g2t = wxgdal.wxGDAL2Tiles( params )
-        self.g2t.setEventHandler( self )
+        # TODO : adapter wxGDAL2Tiles à gdal2tiles:multiprocess
+        self.config_g2t = wxgdal.wxGDAL2Tiles( params )
+        self.tile_g2t = self.config_g2t.create_tile()
+        self.out_data_g2t,self.profile_g2t=self.config_g2t.open_input(self.tile_g2t)
+        self.config_g2t.setEventHandler( self )
 
         wx.PostEvent(self, GenericGuiEvent(_("Opening the input files")))
+        # TODO : adapter wxGDAL2Tiles à gdal2tiles:multiprocess
         self.g2t.open_input()
         # Opening and preprocessing of the input file
 
         if not self.g2t.stopped and not abortEvent():
             wx.PostEvent(self, GenericGuiEvent(_("Generating viewers and metadata")))
             # Generation of main metadata files and HTML viewers
+            # TODO : adapter wxGDAL2Tiles à gdal2tiles:multiprocess
             self.g2t.generate_metadata()
 
         if not self.g2t.stopped and not abortEvent():
             wx.PostEvent(self, GenericGuiEvent(_("Rendering the base tiles")))
             # Generation of the lowest tiles
+            # TODO : adapter wxGDAL2Tiles à gdal2tiles:multiprocess
             self.g2t.generate_base_tiles()
 
         if not self.g2t.stopped and not abortEvent():
             wx.PostEvent(self, GenericGuiEvent(_("Rendering the overview tiles in the pyramid")))
             # Generation of the overview tiles (higher in the pyramid)
+            # TODO : adapter wxGDAL2Tiles à gdal2tiles:multiprocess
             self.g2t.generate_overview_tiles()
     
     def _resultConsumer(self, delayedResult):

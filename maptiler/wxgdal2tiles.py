@@ -1,5 +1,5 @@
 import wx
-from gdal2tiles import GDAL2Tiles
+import gdal2tiles
 
 # TODO: GetText
 from config import _
@@ -13,7 +13,7 @@ class UpdateProgressEvent(wx.PyEvent):
         self.SetEventType(UPDATE_PROGRESS_EVENT)
         self.progress = progress
 
-class wxGDAL2Tiles(GDAL2Tiles):
+class wxGDAL2Tiles(gdal2tiles.Configuration):
 
     def setEventHandler(self, eventHandler):
         self.eventHandler = eventHandler
@@ -21,7 +21,7 @@ class wxGDAL2Tiles(GDAL2Tiles):
     def error(self, msg, details = "" ):
         """Print an error message and stop the processing"""
         
-        self.stop()
+        gdal2tiles.error(msg,details)
         wx.MessageBox(msg, _("Rendering Error"), wx.ICON_ERROR)
         if hasattr(self, 'eventHandler'):
             wx.PostEvent(self.eventHandler, 

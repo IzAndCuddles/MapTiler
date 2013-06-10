@@ -37,7 +37,7 @@ class WizardHtmlWindow(wx.html.HtmlWindow):
             self.FindWindowByName(config.profile).SetValue(1)
         elif step == 2:
             pass
-        elif step == 3:
+        elif step == 3:    
             if not config.srs:
                 config.customsrs = config.files[0][6]
                 config.srs = config.customsrs
@@ -48,12 +48,15 @@ class WizardHtmlWindow(wx.html.HtmlWindow):
             self.FindWindowByName('srs').SetValue(config.srs)
         elif step == 4:
             try:
+                # TODO : adapter wxGDAL2Tiles à gdal2tiles:multiprocess
                 from wxgdal2tiles import wxGDAL2Tiles
-                g2t = wxGDAL2Tiles(['--profile',config.profile,'--s_srs', config.srs, str(config.files[0][2]) ])
-                g2t.open_input()
-                config.tminz = g2t.tminz
-                config.tmaxz = g2t.tmaxz
-                config.kml = g2t.kml
+                
+                config_g2t = wxGDAL2Tiles(['--profile',config.profile,'--s_srs', config.srs, str(config.files[0][2]) ])
+                tile_g2t = config_g2t.create_tile()
+                out_data_g2t,profile_g2t=config_g2t.open_input(tile_g2t)
+                config.tminz = tile_g2t.tminz
+                config.tmaxz = tile_g2t.tmaxz
+                config.kml = config_g2t.kml
                 del g2t
             except Exception, error:
                 wx.MessageBox("%s" % error , _("GDAL2Tiles initialization failed"), wx.ICON_ERROR)
