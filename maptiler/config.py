@@ -18,6 +18,7 @@ title = ""
 copyright = "&copy;"
 googlekey = ""
 yahookey = ""
+nb_process = 0
 
 documentsdir = ""
 
