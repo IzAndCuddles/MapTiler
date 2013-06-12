@@ -443,10 +443,11 @@ def processOverviewTileJobs(q,n):
 
 class MultiProcess(object):
     "The MultiProcess class share a queue between a list of processes"
-    def __init__(self,num_process):
+    def __init__(self,num_process,progress_fct):
         self.q=multiprocessing.Queue()
         self.process=[]
         self.num_process = num_process
+        self.progressbar=progress_fct
     
     def _processTile(self,target,args):
         "Create processes and start them"
@@ -484,7 +485,7 @@ class MultiProcess(object):
                 alive = p.is_alive()
                 if not alive:
                     alive_count -= 1
-                progressbar(n.value/float(ncount))
+                self.progressbar(n.value/float(ncount))
             done = (alive_count == 0)
 
 
@@ -670,6 +671,9 @@ def image_warping(in_ds,in_srs_wkt,out_srs,verbose,in_nodata):
 class Configuration (object):
     "The Configuration class gathers the option-related variables, and the methods initializing variables needed to create the tiles"
     
+    def stop(self):
+        self.stopped=True
+    
     def create_tile(self):
         tile = Tile()
     # User specified zoom levels
@@ -686,6 +690,8 @@ class Configuration (object):
 
     def __init__(self,arguments):
         
+        self.stopped=False
+        
         self.input = None
         self.output = None
         
@@ -699,7 +705,6 @@ class Configuration (object):
             error("No input file specified")
             
         # POSTPROCESSING OF PARSED ARGUMENTS:
-        
         # Tile format
         # TODO : Passer ces deux variables en options dans optparse_init
         if not self.options.format:
@@ -2141,7 +2146,7 @@ def generate_base_tiles(config,profile,tile,out_data):
     # that all processes can modify.
     ti=multiprocessing.Value('f',0.0)
     
-    multiprocess = MultiProcess(config.nb_process)
+    multiprocess = MultiProcess(config.nb_process,config.progressbar)
     multiprocess.processBase(config.options.s_srs, config.input, config.options.profile, config.options.verbose, config.in_nodata,ti)
     for ty in range(tmaxy, tminy-1, -1): #range(tminy, tmaxy+1):
                
@@ -2250,7 +2255,7 @@ def generate_overview_tiles(config,profile,tile,out_data):
     
     # querysize = TILESIZE * 2
     for tz in range(tile.tmaxz-1, tile.tminz-1, -1):
-        multiprocess=MultiProcess(config.nb_process)
+        multiprocess=MultiProcess(config.nb_process,config.progressbar)
         multiprocess.processOverview(ti)
         tminx, tminy, tmaxx, tmaxy = tile.tminmax[tz]
         for ty in range(tmaxy, tminy-1, -1): #range(tminy, tmaxy+1):

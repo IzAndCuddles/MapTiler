@@ -57,7 +57,7 @@ class WizardHtmlWindow(wx.html.HtmlWindow):
                 config.tminz = tile_g2t.tminz
                 config.tmaxz = tile_g2t.tmaxz
                 config.kml = config_g2t.kml
-                del g2t
+                del config_g2t,tile_g2t,out_data_g2t,profile_g2t
             except Exception, error:
                 wx.MessageBox("%s" % error , _("GDAL2Tiles initialization failed"), wx.ICON_ERROR)
             self.FindWindowByName('tminz').SetValue(config.tminz)

@@ -11,7 +11,7 @@ import config
 import icons
 import wizard
 import widgets
-
+import gdal2tiles
 import wxgdal2tiles as wxgdal
 
 # TODO: GetText
@@ -322,7 +322,7 @@ Your geodata are transformed to the tiles compatible with Google Maps and Earth 
         
     def _renderstop(self):
         
-        self.g2t.stop()
+        self.config_g2t.stop()
         self.abortEvent.set()
         self.rendering = False
         self.resume = True
@@ -393,31 +393,28 @@ Your geodata are transformed to the tiles compatible with Google Maps and Earth 
         # TODO : adapter wxGDAL2Tiles à gdal2tiles:multiprocess
         self.config_g2t = wxgdal.wxGDAL2Tiles( params )
         self.tile_g2t = self.config_g2t.create_tile()
+        wx.PostEvent(self, GenericGuiEvent(_("Opening the input files")))
         self.out_data_g2t,self.profile_g2t=self.config_g2t.open_input(self.tile_g2t)
+        # Opening and preprocessing of the input file
         self.config_g2t.setEventHandler( self )
 
-        wx.PostEvent(self, GenericGuiEvent(_("Opening the input files")))
-        # TODO : adapter wxGDAL2Tiles à gdal2tiles:multiprocess
-        self.g2t.open_input()
-        # Opening and preprocessing of the input file
-
-        if not self.g2t.stopped and not abortEvent():
+        if not abortEvent() and not self.config_g2t.stopped:
             wx.PostEvent(self, GenericGuiEvent(_("Generating viewers and metadata")))
             # Generation of main metadata files and HTML viewers
             # TODO : adapter wxGDAL2Tiles à gdal2tiles:multiprocess
-            self.g2t.generate_metadata()
+            gdal2tiles.generate_metadata(self.config_g2t,self.profile_g2t,self.tile_g2t,self.out_data_g2t)
 
-        if not self.g2t.stopped and not abortEvent():
+        if not abortEvent() and not self.config_g2t.stopped:
             wx.PostEvent(self, GenericGuiEvent(_("Rendering the base tiles")))
             # Generation of the lowest tiles
             # TODO : adapter wxGDAL2Tiles à gdal2tiles:multiprocess
-            self.g2t.generate_base_tiles()
+            gdal2tiles.generate_base_tiles(self.config_g2t,self.profile_g2t,self.tile_g2t,self.out_data_g2t)
 
-        if not self.g2t.stopped and not abortEvent():
+        if not abortEvent() and not self.config_g2t.stopped:
             wx.PostEvent(self, GenericGuiEvent(_("Rendering the overview tiles in the pyramid")))
             # Generation of the overview tiles (higher in the pyramid)
             # TODO : adapter wxGDAL2Tiles à gdal2tiles:multiprocess
-            self.g2t.generate_overview_tiles()
+            gdal2tiles.generate_overview_tiles(self.config_g2t,self.profile_g2t,self.tile_g2t,self.out_data_g2t)
     
     def _resultConsumer(self, delayedResult):
         jobID = delayedResult.getJobID()
@@ -425,11 +422,12 @@ Your geodata are transformed to the tiles compatible with Google Maps and Earth 
         try:
             result = delayedResult.get()
         except Exception, exc:
-            #print "Result for job %s raised exception: %s" % (jobID, exc)
+            # TODO gerer les erreurs !
+            print "Result for job %s raised exception: %s" % (jobID, exc)
             return
 
-        if not self.g2t.stopped:
-            #wx.PostEvent(self, GenericGuiEvent(_("Task is finished!")))
+        if not self.config_g2t.stopped:
+            wx.PostEvent(self, GenericGuiEvent(_("Task is finished!")))
             self.SetStep(9)
             self.rendering = False
             self.resume = False
