@@ -348,8 +348,7 @@ Your geodata are transformed to the tiles compatible with Google Maps and Earth 
             '--s_srs',config.srs,
             '--zoom',"%i-%i" % (config.tminz, config.tmaxz),
             '--title',config.title,
-            '--copyright',config.copyright,
-            '--nb_process',config.nb_process
+            '--copyright',config.copyright
             ]
         viewer = 'none'
         if config.google:
